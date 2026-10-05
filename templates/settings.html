@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            color: #222;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .name {
+            font-weight: bold;
+        }
+
+        .value {
+            color: #666;
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-left: 4px solid #999;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>{{ title }}</h1>
+    <p>Manage your application preferences.</p>
+
+    <div class="section">
+        <h2>Preferences</h2>
+
+        {% for setting in settings %}
+            <div class="setting">
+                <span class="name">{{ setting.name }}</span>
+                <span class="value">{{ setting.value }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <h2>System Information</h2>
+
+        {% for key, value in system_info.items() %}
+            <div class="setting">
+                <span class="name">{{ key }}</span>
+                <span class="value">{{ value }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="note">
+        Some configuration options are restricted to authorized administrators.
+        <br>
+        Application configuration is stored separately from user preferences.\
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Internal Search</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        input {
+            width: 70%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .result {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .result:hover {
+            background: #f5f5f5;
+        }
+
+        #content {
+            margin-top: 30px;
+        }
+
+        pre {
+            background: #eee;
+            padding: 15px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Internal Search</h1>
+
+    <p>Search the internal documentation.</p>
+
+    <input
+    type="text"
+    id="searchInput"
+    placeholder="Search..."
+    onkeydown="handleSearchKey(event)"
+>
+
+<button onclick="search()">Search</button>
+
+<div id="results"></div>
+
+<div id="content"></div>
+
+<script>
+
+    function handleSearchKey(event) {
+        if (event.key === "Enter") {
+            search();
+        }
+    }
+
+
+    async function search() {
+
+        const query =
+            document.getElementById("searchInput").value;
+
+        const response = await fetch(
+            `/search?q=${encodeURIComponent(query)}`
+        );
+
+        const data = await response.json();
+
+        const results =
+            document.getElementById("results");
+
+        results.innerHTML = "";
+
+        if (data.results.length === 0) {
+
+            results.innerHTML =
+                "<p>No results found.</p>";
+
+            return;
+        }
+
+        data.results.forEach(result => {
+
+            const element =
+                document.createElement("div");
+
+            element.className = "result";
+
+            element.innerHTML = `
+                <h2>${result.title}</h2>
+                <p>${result.description}</p>
+            `;
+
+            element.onclick = () => {
+
+                if (result.type === "page") {
+                    window.location.href = result.url;
+                } else {
+                    loadInternalDocument(result.url);
+                }
+
+            };
+
+            results.appendChild(element);
+
+        });
+    }
+
+
+    async function loadInternalDocument(url) {
+
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        document.getElementById("content").innerHTML = `
+            <h2>${data.title}</h2>
+            <p>${data.content}</p>
+        `;
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .file {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .file:hover {
+            background: #f5f5f5;
+        }
+
+        img {
+            max-width: 500px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>{{ title }}</h1>
+
+    <p>Available documents:</p>
+
+    <div id="files">
+        {% for file in files %}
+            <div class="file" onclick="openFile('{{ file }}')">
+                📄 {{ file }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="content"></div>
+
+    <script>
+        function openFile(filename) {
+            const extension =
+                filename.split(".").pop().toLowerCase();
+
+            const content =
+                document.getElementById("content");
+
+            if (["jpg", "jpeg", "png", "gif", "webp"].includes(extension)) {
+
+                content.innerHTML = `
+                    <img src="/documents/user/${filename}">
+                `;
+
+            } else {
+
+                content.innerHTML = `
+                    <p>
+                        <a href="/documents/user/${filename}">
+                            Open ${filename}
+                        </a>
+                    </p>
+                `;
+            }
+        }
+    </script>
+
+</body>
+</html>
+```
